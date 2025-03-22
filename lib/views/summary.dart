@@ -137,7 +137,7 @@ class _SummaryState extends State<Summary> {
                                 ),
                               ),
                             );
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.deepPurple,

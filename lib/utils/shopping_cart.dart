@@ -22,7 +22,7 @@ class ShoppingCart {
   }
 
   int? getProductQty(Product product) {
-    if(cart.containsKey(product)) {
+    if (cart.containsKey(product)) {
       return cart[product];
     } else {
       return 0;
@@ -46,7 +46,13 @@ class ShoppingCart {
   double getTotal() {
     double total = 0.0;
     cart.forEach((product, quantity) {
-      total += product.price * quantity;
+      if (product.promoPrice != null && product.promoQuantity != null) {
+        int promotions = quantity ~/ product.promoQuantity!;
+        int remaining = quantity % product.promoQuantity!;
+        total += (promotions * product.promoPrice!) + (remaining * product.price);
+      } else {
+        total += product.price * quantity;
+      }
     });
     return total;
   }
@@ -56,7 +62,9 @@ class ShoppingCart {
       print("Cart is empty.");
     } else {
       cart.forEach((product, quantity) {
-        print("${product.category.name} ${product.name} - Quantity: $quantity - Total: \$${product.price * quantity}");
+        print(
+          "${product.category.name} ${product.name} - Quantity: $quantity - Total: \$${product.price * quantity}",
+        );
       });
       print("Total Price: \$${getTotal()}");
     }
@@ -67,15 +75,34 @@ class ShoppingCart {
   }
 
   Future<void> makeSale(PaymentMethod pMethod) async {
-    Sale sale = Sale(paymentMethod: pMethod, total: getTotal(), datetime: DateTime.now(), id: 'Sale_${pMethod.name}_${DateTime.now().toString()}');
+    Sale sale = Sale(
+      paymentMethod: pMethod,
+      total: getTotal(),
+      datetime: DateTime.now(),
+      id: 'Sale_${pMethod.name}_${DateTime.now().toString()}',
+    );
     globalBu.addSale(sale);
     cart.forEach((product, quantity) {
-      //sale.productsSold.add(product.id);          //Add the product to the sale (not commited)
-      SaleProduct sp = SaleProduct(product: product, quantity: quantity, sale: sale.id);
-      globalBu.addSaleProduct(sp);     //Add sale product
+      double total = 0;
+      if (product.promoPrice != null && product.promoQuantity != null) {
+        int promotions = quantity ~/ product.promoQuantity!;
+        int remaining = quantity % product.promoQuantity!;
+        total += (promotions * product.promoPrice!) + (remaining * product.price);
+      } else {
+        total += product.price * quantity;
+      }
+      SaleProduct sp = SaleProduct(
+        product: product,
+        quantity: quantity,
+        sale: sale.id,
+        total: total
+      );
+      globalBu.addSaleProduct(sp); //Add sale product
       globalBu.addSaleProdToSale(sale, sp);
-      globalBu.addProductStock(product, quantity * -1);     //Update stock of product
+      globalBu.addProductStock(
+        product,
+        quantity * -1,
+      ); //Update stock of product
     });
-    //globalBu.saleBox.put(sale.id, sale);          //Commit sale with products ids
   }
 }

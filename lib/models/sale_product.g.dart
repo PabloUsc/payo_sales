@@ -20,6 +20,7 @@ class SaleProductAdapter extends TypeAdapter<SaleProduct> {
       product: fields[1] as Product,
       quantity: fields[2] as int,
       sale: fields[4] as String,
+      total: fields[3] as double,
     );
   }
 
@@ -34,7 +35,7 @@ class SaleProductAdapter extends TypeAdapter<SaleProduct> {
       ..writeByte(2)
       ..write(obj.quantity)
       ..writeByte(3)
-      ..write(obj.unitPrice)
+      ..write(obj.total)
       ..writeByte(4)
       ..write(obj.sale);
   }

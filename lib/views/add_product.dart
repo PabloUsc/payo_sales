@@ -37,6 +37,9 @@ class _AddProductFormState extends State<AddProductForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _promoQtyController = TextEditingController();
+  final TextEditingController _promoPriceController = TextEditingController();
+  bool hasPromotion = false;
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +199,115 @@ class _AddProductFormState extends State<AddProductForm> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 16),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Tiene promoción:",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Switch(
+                          value: hasPromotion,
+                          activeColor: Colors.deepPurple,
+                          splashRadius: 2,
+                          onChanged: (bool value) {
+                            setState(() {
+                              hasPromotion = value;
+                            });
+                          },
+                        ),
+                        // SizedBox(height: 16),
+                        Visibility(
+                          visible: hasPromotion,
+                          // child: Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ), // White text
+                                  decoration: InputDecoration(
+                                    labelText: 'Cantidad promoción',
+                                    labelStyle: TextStyle(
+                                      color: Colors.white70,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  controller: _promoQtyController,
+                                  validator: (String? value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Ingrese la cantidad de la promoción';
+                                    }
+                                    final parsedValue = int.tryParse(value);
+                                    if (parsedValue == null) {
+                                      return 'Ingrese un número válido';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Text(
+                                " x ",
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
+                                    labelText: 'Precio promoción',
+                                    labelStyle: TextStyle(
+                                      color: Colors.white70,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  controller: _promoPriceController,
+                                  validator: (String? value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Ingrese la cantidad de la promoción';
+                                    }
+                                    final parsedValue = double.tryParse(value);
+                                    if (parsedValue == null) {
+                                      return 'Ingrese un número válido';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -212,16 +324,31 @@ class _AddProductFormState extends State<AddProductForm> {
                       _addCategoryForm != null &&
                       // ignore: unnecessary_null_comparison
                       _addProviderForm != null) {
-                    globalBu.addProduct(
-                      Product(
-                        name: _nameController.text,
-                        cost: double.parse(_costController.text),
-                        price: double.parse(_priceController.text),
-                        stock: 0,
-                        category: _addCategoryForm,
-                        provider: _addProviderForm,
-                      ),
-                    );
+                    if (hasPromotion) {
+                      globalBu.addProduct(
+                        Product(
+                          name: _nameController.text,
+                          cost: double.parse(_costController.text),
+                          price: double.parse(_priceController.text),
+                          stock: 0,
+                          category: _addCategoryForm,
+                          provider: _addProviderForm,
+                          promoPrice: double.parse(_promoPriceController.text),
+                          promoQuantity: int.parse(_promoQtyController.text)
+                        ),
+                      );
+                    } else {
+                      globalBu.addProduct(
+                        Product(
+                          name: _nameController.text,
+                          cost: double.parse(_costController.text),
+                          price: double.parse(_priceController.text),
+                          stock: 0,
+                          category: _addCategoryForm,
+                          provider: _addProviderForm,
+                        ),
+                      );
+                    }
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(const SnackBar(content: Text('Guardado!')));

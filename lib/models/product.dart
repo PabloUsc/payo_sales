@@ -46,6 +46,12 @@ class Product extends HiveObject {
   @HiveField(6)
   Provider provider;
 
+  @HiveField(7)
+  int? promoQuantity;
+  
+  @HiveField(8)
+  double? promoPrice;
+
   Product({
     required this.name,
     required this.cost,
@@ -53,5 +59,7 @@ class Product extends HiveObject {
     required this.stock,
     required this.category,
     required this.provider,
+    this.promoQuantity,
+    this.promoPrice
   }) : id = '${name}_${category.name}_${provider.name}';
 }

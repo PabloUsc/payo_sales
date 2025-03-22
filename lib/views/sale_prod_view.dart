@@ -77,7 +77,7 @@ class _SaleProdViewState extends State<SaleProdView> {
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        '\$${(items[index].unitPrice * items[index].quantity).toStringAsFixed(2)}',
+                        '\$${(items[index].total).toStringAsFixed(2)}',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],

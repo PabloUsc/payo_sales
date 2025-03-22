@@ -15,7 +15,7 @@ class SaleProduct extends HiveObject {
   final int quantity;
 
   @HiveField(3)
-  final double unitPrice;
+  final double total;
 
   @HiveField(4)
   final String sale;
@@ -23,6 +23,7 @@ class SaleProduct extends HiveObject {
   SaleProduct({
     required this.product,
     required this.quantity,
-    required this.sale
-  }) : unitPrice = product.price, id = '${sale}_${product.name}';
+    required this.sale,
+    required this.total
+  }) : id = '${sale}_${product.name}';
 }

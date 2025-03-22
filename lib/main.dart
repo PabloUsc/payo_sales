@@ -44,6 +44,11 @@ class PayoSalesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/invent': (BuildContext context) => const Inventory(),
+        '/sale': (BuildContext context) => const Venta(),
+      },
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       theme: ThemeData(

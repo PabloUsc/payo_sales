@@ -112,14 +112,11 @@ class _InventoryState extends State<Inventory> {
                     onTap: () {
                       setState(() {
                         Product productView = items[index];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
+                        _navigateAndRefresh(MaterialPageRoute(
                             builder:
                                 (context) =>
                                     ProductView(productShown: productView),
-                          ),
-                        );
+                          ),);
                       });
                     },
                     onLongPress: () {
@@ -131,12 +128,6 @@ class _InventoryState extends State<Inventory> {
                                 (context) => AddStock(stockProd: stockProd),
                           ),
                         );
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => AddStock(stockProd: stockProd),
-                        //   ),
-                        // );
                       });
                     },
                   ),
@@ -155,10 +146,6 @@ class _InventoryState extends State<Inventory> {
           _navigateAndRefresh(
             MaterialPageRoute(builder: (context) => AddProduct()),
           );
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => AddProduct()),
-          // );
         },
       ),
     );
@@ -166,6 +153,7 @@ class _InventoryState extends State<Inventory> {
 
   void _navigateAndRefresh(MaterialPageRoute route) async {
     final result = await Navigator.push(context, route);
+    if (result == null) return;
     if (result) {
       setState(() {
         items = globalBu.getFilteredProductsCat(selectedCategory);

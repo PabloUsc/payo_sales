@@ -44,7 +44,7 @@ class _VentaState extends State<Venta> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Summary(cart: cart,)));
+              _navigateAndRefresh(MaterialPageRoute(builder: (context) => Summary(cart: cart,)));
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
@@ -213,5 +213,14 @@ class _VentaState extends State<Venta> {
         ),
       ),
     );
+  }
+  void _navigateAndRefresh(MaterialPageRoute route) async {
+    final result = await Navigator.push(context, route);
+    if (result == null) return;
+    if (result) {
+      setState(() {
+        resetItems();
+      });
+    }
   }
 }
