@@ -14,8 +14,15 @@ class Summary extends StatefulWidget {
 class _SummaryState extends State<Summary> {
   final ShoppingCart cart;
   PaymentMethod _method = PaymentMethod.Efectivo;
+  double totalCart = 0.0;
 
   _SummaryState({required this.cart});
+
+  @override
+  void initState() {
+    super.initState();
+    totalCart = cart.getTotal();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,31 +44,33 @@ class _SummaryState extends State<Summary> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           //List of products START
-          Column(
-            children:
-                cart.entries.map<Widget>((entry) {
-                  final product = entry.key;
-                  final quantity = entry.value;
-                  return ListTile(
-                    title: Text(
-                      product.name,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    tileColor: Color.fromARGB(255, 29, 36, 40),
-                    subtitle: Text(
-                      '$quantity x \$${product.price.toStringAsFixed(2)}',
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                    trailing: Text(
-                      '\$${(product.price * quantity).toStringAsFixed(2)}',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+          Expanded(
+            child: Column(
+              children:
+                  cart.entries.map<Widget>((entry) {
+                    final product = entry.key;
+                    final quantity = entry.value;
+                    return ListTile(
+                      title: Text(
+                        product.name,
+                        style: TextStyle(color: Colors.white),
                       ),
-                    ),
-                  );
-                }).toList(),
+                      tileColor: Color.fromARGB(255, 29, 36, 40),
+                      subtitle: Text(
+                        '$quantity x \$${product.price.toStringAsFixed(2)}',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      trailing: Text(
+                        '\$${(product.price * quantity).toStringAsFixed(2)}',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+            ),
           ),
           //List of products END
           SizedBox(height: 10),
@@ -113,30 +122,35 @@ class _SummaryState extends State<Summary> {
             children: [
               SizedBox(width: 16),
               Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      cart.makeSale(_method);
-                      cart.clearCart();
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('La venta ha sido realizada con éxito!'),
-                      ),
-                    );
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                  ),
-                  child: Text(
-                    'Finalizar venta',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                child:
+                    (totalCart > 0)
+                        ? TextButton(
+                          onPressed: () {
+                            setState(() {
+                              cart.makeSale(_method);
+                              cart.clearCart();
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'La venta ha sido realizada con éxito!',
+                                ),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.deepPurple,
+                          ),
+                          child: Text(
+                            'Finalizar venta',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        )
+                        : SizedBox(width: 1),
               ),
               SizedBox(width: 16),
             ],

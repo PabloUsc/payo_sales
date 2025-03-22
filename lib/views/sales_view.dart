@@ -16,7 +16,8 @@ class _SalesViewState extends State<SalesView> {
   @override
   void initState() {
     super.initState();
-    items = globalBu.getSalesTransactions().reversed.toList();
+    items = globalBu.getSalesTransactions();
+    items.sort((a,b) => b.datetime.compareTo(a.datetime));
   }
 
   @override

@@ -36,11 +36,11 @@ class ProductView extends StatelessWidget {
             style: prodText,            
           ),
           Text(
-            'Cost: \$ ${productShown.cost.toStringAsFixed(2)}',
+            'Costo: \$${productShown.cost.toStringAsFixed(2)}',
             style: prodText,            
           ),
           Text(
-            'Price: \$ ${productShown.price.toStringAsFixed(2)}',
+            'Precio de venta: \$${productShown.price.toStringAsFixed(2)}',
             style: prodText,            
           ),
           Text(

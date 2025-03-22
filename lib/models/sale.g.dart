@@ -19,6 +19,8 @@ class SaleAdapter extends TypeAdapter<Sale> {
     return Sale(
       paymentMethod: fields[2] as PaymentMethod,
       total: fields[3] as double,
+      datetime: fields[1] as DateTime,
+      id: fields[0] as String,
     )..productsSold = (fields[4] as List).cast<String>();
   }
 

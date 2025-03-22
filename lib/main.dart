@@ -71,11 +71,11 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.deepPurple,
-        //////////////////////////////////DELETE BEFORE COMPILING APK//////////////////////////////////
-        actions: [
-          IconButton(onPressed: () => globalBu.clearAllBoxes(), icon: Icon(Icons.delete_forever))
-        ],
-        /////////////////////////////////////////END OF DELETE/////////////////////////////////////////
+        //////////////////////////////////COMMENT BEFORE COMPILING APK//////////////////////////////////
+        // actions: [
+        //   IconButton(onPressed: () => globalBu.clearAllBoxes(), icon: Icon(Icons.delete_forever))
+        // ],
+        /////////////////////////////////////////END OF DELETE//////////////////////////////////////////
       ),
       body: Center(
         child: Column(

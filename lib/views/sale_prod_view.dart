@@ -24,7 +24,6 @@ class _SaleProdViewState extends State<SaleProdView> {
     setState(() {
       items = globalBu.getProductsOfSale(sale);
     });
-    print(sale.productsSold);
   }
 
   @override
@@ -46,6 +45,14 @@ class _SaleProdViewState extends State<SaleProdView> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            ' Hora de venta: ${sale.datetime.hour}:${sale.datetime.minute}:${sale.datetime.second}',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
           ListView.builder(
             shrinkWrap: true,
             itemCount: items.length,
@@ -70,8 +77,7 @@ class _SaleProdViewState extends State<SaleProdView> {
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        '\$${(items[index].unitPrice *
-                                items[index].quantity).toStringAsFixed(2)}',
+                        '\$${(items[index].unitPrice * items[index].quantity).toStringAsFixed(2)}',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -85,11 +91,19 @@ class _SaleProdViewState extends State<SaleProdView> {
             children: [
               Text(
                 sale.paymentMethod.name,
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               Text(
                 'Total: \$${sale.total.toStringAsFixed(2)}',
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
           ),

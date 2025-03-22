@@ -21,6 +21,7 @@ class _InventoryState extends State<Inventory> {
     super.initState();
     setState(() {
       items = globalBu.getFilteredProductsCat(selectedCategory);
+      items.sort((a, b) => b.stock.compareTo(a.stock));
     });
   }
 
@@ -59,6 +60,7 @@ class _InventoryState extends State<Inventory> {
                             items = globalBu.getFilteredProductsCat(
                               selectedCategory,
                             );
+                            items.sort((a, b) => b.stock.compareTo(a.stock));
                           });
                         },
                         showCheckmark: false,
@@ -77,53 +79,70 @@ class _InventoryState extends State<Inventory> {
                   }).toList(),
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (_, index) {
-              return Card(
-                color: Color.fromARGB(255, 20, 24, 27),
-                child: ListTile(
-                  title: Text(
-                    items[index].name!,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: items.length,
+              itemBuilder: (_, index) {
+                return Card(
+                  color: Color.fromARGB(255, 20, 24, 27),
+                  child: ListTile(
+                    title: Text(
+                      items[index].name!,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${items[index].stock} disponibles',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          '  \$ ${items[index].price.toStringAsFixed(2)}',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      setState(() {
+                        Product productView = items[index];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    ProductView(productShown: productView),
+                          ),
+                        );
+                      });
+                    },
+                    onLongPress: () {
+                      setState(() {
+                        Product stockProd = items[index];
+                        _navigateAndRefresh(
+                          MaterialPageRoute(
+                            builder:
+                                (context) => AddStock(stockProd: stockProd),
+                          ),
+                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => AddStock(stockProd: stockProd),
+                        //   ),
+                        // );
+                      });
+                    },
                   ),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${items[index].stock} disponibles',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        '  \$ ${items[index].price.toStringAsFixed(2)}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    setState(() {
-                      Product productView = items[index];
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProductView(productShown: productView)));
-                    });
-                  },
-                  onLongPress: () {
-                    setState(() {
-                      Product stockProd = items[index];
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddStock(stockProd: stockProd)),
-                      );
-                    });
-                  },
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -133,12 +152,25 @@ class _InventoryState extends State<Inventory> {
         shape: const CircleBorder(),
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
-          Navigator.push(
-            context,
+          _navigateAndRefresh(
             MaterialPageRoute(builder: (context) => AddProduct()),
           );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => AddProduct()),
+          // );
         },
       ),
     );
+  }
+
+  void _navigateAndRefresh(MaterialPageRoute route) async {
+    final result = await Navigator.push(context, route);
+    if (result) {
+      setState(() {
+        items = globalBu.getFilteredProductsCat(selectedCategory);
+        items.sort((a, b) => b.stock.compareTo(a.stock));
+      });
+    }
   }
 }

@@ -1,14 +1,18 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:core';
 import 'package:hive/hive.dart';
 
 part 'sale.g.dart';
 
 @HiveType(typeId: 4)
 enum PaymentMethod {
-  @HiveField(0) Efectivo,
-  @HiveField(1) Tarjeta,
-  @HiveField(2) Transferencia
+  @HiveField(0)
+  Efectivo,
+  @HiveField(1)
+  Tarjeta,
+  @HiveField(2)
+  Transferencia,
 }
 
 @HiveType(typeId: 3)
@@ -28,8 +32,6 @@ class Sale extends HiveObject {
   @HiveField(4)
   List<String> productsSold; // List of sale products sold
 
-  Sale({
-    required this.paymentMethod,
-    required this.total,
-  }) : datetime = DateTime.now(), id = 'Sale_${paymentMethod}_${DateTime.now().toString()}', productsSold = List<String>.empty(growable: true);
+  Sale({required this.paymentMethod, required this.total, required this.datetime, required this.id})
+    : productsSold = List<String>.empty(growable: true);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:payo_sales/main.dart';
 import 'package:payo_sales/models/product.dart';
-//import 'package:payo_sales/utils/box_utils.dart';
 
 class AddProduct extends StatelessWidget {
   const AddProduct({super.key});
@@ -226,7 +225,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(const SnackBar(content: Text('Guardado!')));
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   }
                 });
               },

@@ -145,7 +145,7 @@ class _AddStockFormState extends State<AddStockForm> {
                         ),
                       ),
                     );
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   });
                 }
               },

@@ -67,7 +67,7 @@ class ShoppingCart {
   }
 
   Future<void> makeSale(PaymentMethod pMethod) async {
-    Sale sale = Sale(paymentMethod: pMethod, total: getTotal());
+    Sale sale = Sale(paymentMethod: pMethod, total: getTotal(), datetime: DateTime.now(), id: 'Sale_${pMethod.name}_${DateTime.now().toString()}');
     globalBu.addSale(sale);
     cart.forEach((product, quantity) {
       //sale.productsSold.add(product.id);          //Add the product to the sale (not commited)
